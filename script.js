@@ -14,7 +14,8 @@
   const fab = $("fab"), fabCount = $("fabCount"), progressBar = $("progressBar");
   const favChip = $("favChip"), favChipLabel = $("favChipLabel");
   const lightbox = $("lightbox"), lbTrack = $("lbTrack"), lbDots = $("lbDots"),
-    lbName = $("lbName"), lbPick = $("lbPick"), lbPickLabel = $("lbPickLabel");
+    lbName = $("lbName"), lbPick = $("lbPick"), lbPickLabel = $("lbPickLabel"),
+    lbWa = $("lbWa"), waSend = $("waSend");
   const backdrop = $("backdrop"), sheet = $("sheet"), sheetGrid = $("sheetGrid"),
     sheetSub = $("sheetSub"), sheetEmpty = $("sheetEmpty"), confirmBtn = $("confirmBtn"),
     confirmCount = $("confirmCount"), clearAllBtn = $("clearAll"), success = $("success");
@@ -28,6 +29,10 @@
     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>';
   const plusSVG =
     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>';
+
+  /* ---------- WhatsApp ---------- */
+  const WHATSAPP = "917577042390";
+  const waLink = (msg) => "https://wa.me/" + WHATSAPP + "?text=" + encodeURIComponent(msg);
 
   /* ---------- Render gallery ---------- */
   gallery.innerHTML = designs.map((d, i) => `
@@ -55,11 +60,66 @@
       <img src="${d.src}" alt="${d.name}" draggable="false">
     </div>`).join("");
 
+  /* ---------- Title letters ---------- */
+  function initTitle() {
+    let n = 0;
+    document.querySelectorAll(".title .word").forEach(word => {
+      const chars = word.textContent.split("");
+      word.textContent = "";
+      chars.forEach(ch => {
+        const s = document.createElement("span");
+        s.className = "ch";
+        s.textContent = ch;
+        s.style.setProperty("--d", (n++ * 42 + 150) + "ms");
+        word.appendChild(s);
+      });
+    });
+  }
+
+  /* ---------- Ticker ---------- */
+  function initTicker() {
+    const moods = ["Bold", "Minimal", "Elegant", "Dynamic", "Modern", "Luxe", "Clean", "Edgy"];
+    const html = moods.map(t => `<span class="ticker-item">&#10022; <b>${t}</b></span>`).join("");
+    $("tickerTrack").innerHTML = html + html;
+  }
+
+  /* ---------- Floating sparks ---------- */
+  function initSparks() {
+    const bg = document.querySelector(".bg");
+    for (let i = 0; i < 16; i++) {
+      const s = document.createElement("span");
+      s.className = "spark";
+      const size = (2 + Math.random() * 4).toFixed(1);
+      s.style.cssText =
+        `left:${(Math.random() * 100).toFixed(1)}%;width:${size}px;height:${size}px;` +
+        `--dx:${(Math.random() * 180 - 90).toFixed(0)}px;` +
+        `animation-duration:${(7 + Math.random() * 9).toFixed(1)}s;` +
+        `animation-delay:${(Math.random() * 8).toFixed(1)}s;`;
+      bg.appendChild(s);
+    }
+  }
+
+  /* ---------- 3D tilt (mouse only) ---------- */
+  function initTilt() {
+    if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+    gallery.querySelectorAll(".media").forEach(media => {
+      const card = media.closest(".card");
+      media.addEventListener("pointermove", (e) => {
+        const r = card.getBoundingClientRect();
+        const px = (e.clientX - r.left) / r.width - 0.5;
+        const py = (e.clientY - r.top) / r.height - 0.5;
+        media.style.transform =
+          `rotateY(${(px * 10).toFixed(2)}deg) rotateX(${(-py * 10).toFixed(2)}deg)`;
+      });
+      media.addEventListener("pointerleave", () => { media.style.transform = ""; });
+    });
+  }
+
   /* ---------- Scroll reveal ---------- */
   const io = new IntersectionObserver((entries) => {
     entries.forEach((e, k) => {
       if (e.isIntersecting) {
-        e.target.style.transitionDelay = (k * 40) + "ms";
+        e.target.style.setProperty("--d", (k * 70) + "ms");
         e.target.classList.add("in");
         io.unobserve(e.target);
       }
@@ -74,6 +134,8 @@
     confirmCount.textContent = "(" + n + ")";
     progressBar.style.width = (n / designs.length * 100) + "%";
     sheetSub.textContent = n + (n === 1 ? " design picked" : " designs picked");
+    waSend.href = n ? waLink("Hi! I've shortlisted these designs for our website: " +
+      [...selected].sort((a, b) => a - b).map(i => designs[i].name).join(", ")) : "#";
     renderPickerSheet();
   }
 
@@ -159,6 +221,8 @@
     const isPicked = selected.has(lbIndex);
     lbPick.classList.toggle("picked", isPicked);
     lbPickLabel.textContent = isPicked ? "Selected — tap to undo" : "Select this design — " + designs[lbIndex].name;
+    lbWa.href = waLink("Hi! I'm interested in " + designs[lbIndex].name +
+      " for our website. Can we discuss it further?");
     lbDots.innerHTML = designs.map((_, i) =>
       `<span class="lb-dot${i === lbIndex ? " active" : ""}"></span>`).join("");
   }
@@ -312,6 +376,10 @@
   });
 
   /* init */
+  initTitle();
+  initTicker();
+  initSparks();
+  initTilt();
   refreshGallery();
   sync();
   updateLightboxPick();
