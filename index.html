@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0b0f1a">
+<title>Design Picker — Choose Your Website Design</title>
+<link rel="stylesheet" href="style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <span class="brand-dot"></span>
+      <span class="brand-text">CREATE&nbsp;Studio</span>
+    </div>
+    <button class="fav-chip" id="favChip" aria-pressed="false">
+      <span class="chip-dots"></span>
+      <span id="favChipLabel">All designs</span>
+    </button>
+  </div>
+  <div class="progress"><span id="progressBar"></span></div>
+</header>
+
+<main class="wrap">
+
+  <section class="hero">
+    <p class="eyebrow">Web design selection</p>
+    <h1 class="title">Pick the vibe <br><span class="grad">you love.</span></h1>
+    <p class="sub">Browse the concepts below. Tap the <span class="plus-badge">+</span> on any design to add it to your favorites. You can preview each one full-screen.</p>
+  </section>
+
+  <section id="gallery" class="gallery"></section>
+
+  <footer class="foot">Tap <span class="grad">View Selection</span> at the bottom to review your final picks.</footer>
+
+</main>
+
+<div class="fab" id="fab" role="button" tabindex="0" aria-label="View selection">
+  <svg class="fab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>
+  <span class="fab-count" id="fabCount">0</span>
+  <span class="fab-label">View Selection</span>
+</div>
+
+<div class="backdrop" id="backdrop"></div>
+
+<div class="lightbox" id="lightbox" aria-modal="true">
+  <button class="lb-btn lb-close" id="lbClose" aria-label="Close">&#10005;</button>
+  <div class="lb-viewport" id="lbViewport">
+    <div class="lb-track" id="lbTrack"></div>
+  </div>
+  <button class="lb-btn lb-nav lb-prev" id="lbPrev" aria-label="Previous">&#8249;</button>
+  <button class="lb-btn lb-nav lb-next" id="lbNext" aria-label="Next">&#8250;</button>
+  <div class="lb-meta">
+    <div class="lb-names"><span class="lb-name" id="lbName"></span><span class="lb-dots" id="lbDots"></span></div>
+    <button class="lb-pick" id="lbPick">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+      <span id="lbPickLabel">Select this design</span>
+    </button>
+  </div>
+</div>
+
+<div class="sheet" id="sheet" aria-modal="true">
+  <div class="sheet-handle"></div>
+  <div class="sheet-head">
+    <h2 class="sheet-title">Your favorites</h2>
+    <span class="sheet-sub" id="sheetSub">0 designs picked</span>
+  </div>
+  <div class="sheet-grid" id="sheetGrid"></div>
+  <div class="sheet-empty" id="sheetEmpty">
+    <div class="empty-heart">&#9825;</div>
+    <p>Nothing picked yet. Go back and tap the <b>+</b> on designs you love.</p>
+  </div>
+  <div class="sheet-actions">
+    <button class="btn btn-ghost" id="clearAll">Clear all</button>
+    <button class="btn btn-primary confirm" id="confirmBtn">Confirm Selection <span id="confirmCount"></span></button>
+  </div>
+
+  <div class="success" id="success">
+    <div class="success-tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+    <h2 class="success-title">Got it!</h2>
+    <p class="success-text">Your favorite designs are locked in and ready to share with the team.</p>
+    <button class="btn btn-primary btn-block" id="copyList">Copy design list</button>
+    <button class="btn btn-ghost btn-block" id="doneBtn">Done</button>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
